@@ -3,5 +3,6 @@
 *#
 venv
 *.pyc
+*.db
 staticfiles
 django_bookmarks/bookmarks/migrations/
