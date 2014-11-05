@@ -1,0 +1,7 @@
+*~
+*.swp
+*#
+venv
+*.pyc
+staticfiles
+django_bookmarks/bookmarks/migrations/
