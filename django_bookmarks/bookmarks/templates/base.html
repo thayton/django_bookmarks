@@ -6,7 +6,7 @@
     <title>
       Django Bookmarks | {% block title %}{% endblock %}
     </title>
-    <link rel="stylesheet" type="text/css" href="{% static 'bookmarks.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bookmarks.css' %}" />
   </head>
   <body>
     <div id="nav">
@@ -14,7 +14,8 @@
       {% if user.is_authenticated %}
         welcome {{ user.username }} (<a href="{% url 'logout' %}">logout</a>)
       {% else %}
-        <a href="{% url 'django.contrib.auth.views.login' %}">login</a>
+        <a href="{% url 'django.contrib.auth.views.login' %}">login</a> |
+        <a href="{% url 'register' %}">register</a>
       {% endif %}
     </div>
     <h1>{% block head %}{% endblock %}</h1>

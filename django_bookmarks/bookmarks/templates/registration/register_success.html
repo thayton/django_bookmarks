@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Registration Successful{% endblock %}
+{% block head %}Registration Completed Successfully{% endblock %}
+
+{% block content %}
+  Thank you for registering. Your information has been saved
+  in the database. Now you can either 
+  <a href="{% url 'django.contrib.auth.views.login' %}">login</a> or go back to the
+  <a href="{% url 'home' %}">main page</a>.
+{% endblock %}
