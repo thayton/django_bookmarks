@@ -14,3 +14,10 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return '%s %s %s' % (self.user.username, self.title, self.link)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    bookmarks = models.ManyToManyField(Bookmark, related_name='tags')
+
+    def __str__(self):
+        return self.name

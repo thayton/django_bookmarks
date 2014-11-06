@@ -12,7 +12,9 @@
     <div id="nav">
       <a href="/">home</a> |
       {% if user.is_authenticated %}
-        welcome {{ user.username }} (<a href="{% url 'logout' %}">logout</a>)
+        <a href="{% url 'save_bookmark' %}">submit</a> |
+	<a href="{% url 'user_page' user.username %}">{{ user.username }}</a> |
+        <a href="{% url 'logout' %}">logout</a>)
       {% else %}
         <a href="{% url 'django.contrib.auth.views.login' %}">login</a> |
         <a href="{% url 'register' %}">register</a>
