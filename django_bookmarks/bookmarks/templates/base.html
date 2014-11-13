@@ -7,14 +7,17 @@
       Django Bookmarks | {% block title %}{% endblock %}
     </title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bookmarks.css' %}" />
+    <script type="text/javascript" src="{% static 'vendor/jquery/1.11.1/jquery-1.11.1.js' %}"></script>
+    {% block external %}{% endblock %}
   </head>
   <body>
     <div id="nav">
       <a href="/">home</a> |
       {% if user.is_authenticated %}
         <a href="{% url 'save_bookmark' %}">submit</a> |
+        <a href="{% url 'search_page' %}">search</a> |
 	<a href="{% url 'user_page' user.username %}">{{ user.username }}</a> |
-        <a href="{% url 'logout' %}">logout</a>)
+        <a href="{% url 'logout' %}">logout</a>
       {% else %}
         <a href="{% url 'django.contrib.auth.views.login' %}">login</a> |
         <a href="{% url 'register' %}">register</a>

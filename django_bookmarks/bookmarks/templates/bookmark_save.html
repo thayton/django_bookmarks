@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+{% block external %}
+  <link rel="stylesheet" type="text/css"
+	href="{% static 'vendor/jquery-ui-1.11.2/jquery-ui.css' %}" />
+  <script type="text/javascript"
+	src="{% static 'vendor/jquery-ui-1.11.2/jquery-ui.js' %}"></script>
+  <script type="text/javascript"
+	src="{% static 'js/tag_autocomplete.js' %}"></script>
+{% endblock %}
+
 {% block title %}Save Bookmark{% endblock %}
 {% block head %}Save Bookmark{% endblock %}
 {% block content %}
-<form method="post" action=".">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="save" />
-</form>
+{% include "bookmark_save_form.html" %}
 {% endblock %}
