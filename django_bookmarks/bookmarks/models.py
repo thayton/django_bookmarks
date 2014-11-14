@@ -21,3 +21,12 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+class SharedBookmark(models.Model):
+    bookmark = models.ForeignKey(Bookmark, unique=True)
+    date = models.DateTimeField(auto_now_add=True)
+    votes = models.IntegerField(default=1)
+    users_voted = models.ManyToManyField(User)
+
+    def __str__(self):
+        return '%s, %d' % (self.bookmark, self.votes)    

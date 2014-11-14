@@ -45,4 +45,15 @@ class BookmarkSaveForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'size': 64})
     )
+    share = forms.BooleanField(
+        label=u'Share on the main page',
+        required=False
+    )
+    
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        label=u'Enter a keyword to search for',
+        widget=forms.TextInput(attrs={'size': 32})
+    )
+
 
