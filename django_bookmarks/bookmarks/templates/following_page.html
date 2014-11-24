@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ username }} Following {% endblock %}
+{% block head %}{{ username }} Following {% endblock %}
+
+{% block content %}
+  <h2>Following</h2>
+  {% if followed %}
+    <ul class="following">
+      {% for followed_user in followed %}
+        <li>
+	  <a href="{% url 'user_page' followed_user.username %}">
+	    {{ followed_user.username }}
+	  </a>
+	</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>User {{ username }} isn't following anyone</p>
+  {% endif %}
+
+  <h2>Latest Bookmarks From Users Being Followed</h2>
+  {% include "bookmark_list.html" %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ username }} Followers {% endblock %}
+{% block head %}{{ username }} Followers {% endblock %}
+
+{% block content %}
+  <h2>Followers</h2>
+  {% if followed %}
+    <ul class="following">
+      {% for follower in followers %}
+        <li>
+	  <a href="{% url 'user_page' follower.username %}">
+	    {{ follower.username }}
+	  </a>
+	</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>User {{ username }} doesn't have any followers.</p>
+  {% endif %}
+
+  <h2>Latest Bookmarks From Followers</h2>
+  {% include "bookmark_list.html" %}
+{% endblock %}
