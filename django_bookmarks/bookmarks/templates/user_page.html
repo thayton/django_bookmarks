@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% block external %}
   <script type="text/javascript" src="{% static 'js/bookmark_edit.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/follow_user.js' %}"></script>
   <link rel="alternate" type="application/rss+xml" 
 	title="Django Bookmarks | Bookmarks for {{ username }}"
 	href="/feeds/user/{{ username}}/" />  
@@ -17,14 +18,12 @@
   {% ifequal user.username username %}
     <a href="{% url 'invite_friend' %}">Invite a friend</a>
   {% else %}
-    {% if is_follower %}
-      <a href="{% url 'following' user.username %}">
-	You are already following {{ username }}
-      </a>
+    {% if is_following %}
+    You are already <a href="{% url 'following' user.username %}">
+      following</a> {{ username }}
+      <a class="follow-user-link" href="/unfollow/{{ username }}/">Unfollow {{ username }}</a>
     {% else %}
-      <a href="/follow/?username={{ username }}">
-	Follow {{ username }}
-      </a>
+      <a class="follow-user-link" href="/follow/{{ username }}/">Follow {{ username }}</a>
     {% endif %}
   {% endifequal %}
 
