@@ -1,0 +1,4 @@
+<form id="follow-user-form" method="post" action="/{{ action }}/{{ username }}/">
+  {% csrf_token %}
+  <input type="submit" value="{{ action|title }} {{ username }}" />
+</form>

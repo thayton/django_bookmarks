@@ -8,7 +8,7 @@ class RegistrationForm(forms.Form):
     password1 = forms.CharField(
         label=u'Password',
         widget=forms.PasswordInput)
-    password1 = forms.CharField(
+    password2 = forms.CharField(
         label=u'Password (Again)',
         widget=forms.PasswordInput)
 
@@ -18,7 +18,7 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError('Username can only contain '
               'alphanumeric characters and the underscore.')
         try:
-            User.objects.get(username=usernmae)
+            User.objects.get(username=username)
         except User.DoesNotExist:
             return username
         raise forms.ValidationError('Username is already taken')
@@ -26,7 +26,7 @@ class RegistrationForm(forms.Form):
     def clean_password2(self):
         if 'password1' in self.cleaned_data:
             password1 = self.cleaned_data['password1']
-            password2 = self.cleaned_data['password1']
+            password2 = self.cleaned_data['password2']
             if password1 == password2:
                 return password2
         raise forms.ValidationError('Passwords do not match.')
@@ -56,4 +56,12 @@ class SearchForm(forms.Form):
         widget=forms.TextInput(attrs={'size': 32})
     )
 
+class FriendInviteForm(forms.Form):
+    name = forms.CharField(label='Friend\'s Name')
+    email = forms.EmailField(label='Friend\'s Email')
 
+class FollowUserForm(forms.Form):
+    username = forms.CharField(label='User', widget=forms.HiddenInput())
+
+class UnfollowUserForm(forms.Form):
+    username = forms.CharField(label='User', widget=forms.HiddenInput())

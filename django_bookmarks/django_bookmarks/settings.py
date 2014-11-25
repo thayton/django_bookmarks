@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'thayton'
+EMAIL_HOST_PASSWORD = 'lgehltb69'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Django Bookmarks <django.bookmarks@example.com'
+
 LOGIN_URL = '/login/'
 
 # Quick-start development settings - unsuitable for production
