@@ -5,7 +5,8 @@ $(document).ready(function() {
 function follow_user_post(result) {
   // Wrap result in a fake div so we can get the top level form
   // http://stackoverflow.com/questions/7723320/why-cant-you-select-top-level-elements-in-an-html-string-with-jquery-and-how-d
-  var wrapped_result = "<div>" + result + "</div>";
+  // http://stackoverflow.com/questions/11047670/creating-a-jquery-object-from-a-big-html-string
+  var wrapped_result = $("<div/>").html(result)
   var form = $("#follow-user-form", wrapped_result);
   var data = {
     csrfmiddlewaretoken: form.find("input[name=csrfmiddlewaretoken]").val()
