@@ -22,6 +22,9 @@ class Bookmark(models.Model):
     def get_absolute_url(self):
         return self.link.url
 
+    def was_shared(self):
+        return len(self.sharedbookmark_set.all()) > 0
+
 class Tag(models.Model):
     name = models.CharField(max_length=64, unique=True)
     bookmarks = models.ManyToManyField(Bookmark, related_name='tags')

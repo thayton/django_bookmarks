@@ -58,6 +58,7 @@ def user_page(request, username):
         'bookmarks': page.object_list, 
         'show_tags': True,
         'show_edit': username == request.user.username,
+        'show_if_shared': username == request.user.username, # Show if user decide to share this link
         'show_paginator': paginator.num_pages > 1,
         'has_prev': page.has_previous(),
         'has_next': page.has_next(),
@@ -170,6 +171,7 @@ def _bookmark_save(request, form):
         bookmark.tags.add(tag)
 
     # Share on the main page if requested
+    import pdb; pdb.set_trace()
     if form.cleaned_data['share']:
         shared, created = SharedBookmark.objects.get_or_create(
             bookmark=bookmark
@@ -178,55 +180,67 @@ def _bookmark_save(request, form):
             shared.users_voted.add(request.user)
             shared.save()
 
+    else:
+        # Check if user is un-sharing a bookmark
+        shared_bookmark = SharedBookmark.objects.filter(bookmark=bookmark)
+        if shared_bookmark:
+            shared_bookmark.delete()
+
     # Save bookmark to database.
     bookmark.save()
     return bookmark
 
 @login_required
 def bookmark_save_page(request):
-    ajax = 'ajax' in request.GET
-
     if request.method == 'POST':
         form = BookmarkSaveForm(request.POST)
         if form.is_valid():
             bookmark = _bookmark_save(request, form)
-            if ajax:
+            if request.is_ajax():
                 vars = {
                     'bookmarks': [bookmark],
                     'show_edit': True,
-                    'show_tags': True
+                    'show_tags': True,
+                    'show_if_shared': True
                 }
                 reqc = RequestContext(request, vars)
                 return render_to_response('bookmark_list.html', reqc)
             else:
                 return HttpResponseRedirect(reverse('user_page', args=(request.user.username,)))
         else:
-            if ajax:
+            if request.is_ajax():
                 return HttpResponse(u'failure') # form invalid for ajax 
     elif 'url' in request.GET:
         url = request.GET['url']
         title = ''
         tags = ''
+        shared_bookmark = False
+
         try:
             link = Link.objects.get(url=url)
             bookmark = Bookmark.objects.get(
                 link=link,
                 user=request.user
             )
-        except (Link.DoesNotExist, Bookmark.DoesNotExist):
+
+            shared_bookmark = SharedBookmark.objects.get(bookmark=bookmark)
+            shared_bookmark = True
+
+        except (Link.DoesNotExist, Bookmark.DoesNotExist, SharedBookmark.DoesNotExist):
             pass
 
         form = BookmarkSaveForm({
                 'url': url,
                 'title': bookmark.title,
-                'tags': ' '.join(tag.name for tag in bookmark.tags.all())
+                'tags': ' '.join(tag.name for tag in bookmark.tags.all()),
+                'share': shared_bookmark
                })
     else:
         form = BookmarkSaveForm()
 
     reqc = RequestContext(request, {'form': form})
 
-    if ajax:
+    if request.is_ajax():
         return render_to_response('bookmark_save_form.html', reqc)
     else:
         return render_to_response('bookmark_save.html', reqc)
@@ -295,13 +309,21 @@ def bookmark_vote_page(request):
         return HttpResponseRedirect('/')
 
 def popular_page(request):
+    '''
+    Return a list of bookmarks with the most votes.
+
+    TODO: Enable filtering by a date range. Eg, most popular
+    during the last week, last 30 days, all time.
+    '''
     today = datetime.today()
     yesterday = today - timedelta(1)
     
     shared_bookmarks = SharedBookmark.objects.filter(
         date__gt=yesterday
     )
-    shared_bookmarks = shared_bookmarks.order_by('-votes')[:10]
+
+#    shared_bookmarks = shared_bookmarks.order_by('-votes')[:10]
+    shared_bookmarks = SharedBookmark.objects.order_by('-votes')[:10]
 
     reqc = RequestContext(request, {'shared_bookmarks': shared_bookmarks})
     return render_to_response('popular_page.html', reqc)

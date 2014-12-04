@@ -18,7 +18,8 @@ function bookmark_save() {
     csrfmiddlewaretoken: item.find("input[name=csrfmiddlewaretoken]").val(),
     url: item.find("#id_url").val(),
     title: item.find("#id_title").val(),
-    tags: item.find("#id_tags").val()
+    tags: item.find("#id_tags").val(),
+    share: item.find("#id_share").prop('checked')
   };
   $.post("/save/?ajax", data, function (result) {
     if (result != "failure") {
